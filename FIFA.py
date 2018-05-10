@@ -8,8 +8,9 @@ from directkeys import *
 
 class FIFA(object):
     """
-    Class FIFA is the intermediate "API" to the actual game.
-    It interacts with the actual game using screen-grab (input) and keypress simulation (output) using python libraries.
+    This class acts as the intermediate "API" to the actual game. Double quotes API because we are not touching the
+    game's actual code. It interacts with the game simply using screen-grab (input) and keypress simulation (output)
+    using some clever python libraries.
     """
 
     def __init__(self):
@@ -24,9 +25,10 @@ class FIFA(object):
         reward_screen = screen[85:130, 1650:1730]
         i = Image.fromarray(reward_screen.astype('uint8'), 'RGB')
         total_reward = pt.image_to_string(i)
-        return total_reward
+        return int(total_reward)
 
     def _is_over(self):
+        # true if released shoot, false otherwise
         return True
 
     def observe(self):
@@ -38,10 +40,16 @@ class FIFA(object):
         return screen_resized.reshape((1, -1))
 
     def act(self, action):
-        PressKey(0x11)
+        PressKey(0x39)
+        # wait until some time after taking action
         reward = self._get_reward()
         game_over = self._is_over()
         return self.observe(), reward, game_over
 
     def reset(self):
         self.reward = 0
+        screen = grab_screen(region=None)
+        screen = screen[25:-40, 1921:]
+        screen_resized = cv2.resize(screen, (780, 480))
+        # press enter
+        PressKey(0x39)

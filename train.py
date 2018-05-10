@@ -1,7 +1,18 @@
 import numpy as np
+import ExperienceReplay
+
+# parameters
+epsilon = .1  # exploration
+num_actions = 3  # [move_left, stay, move_right]
+max_memory = 500  # Maximum number of experiences we are storing
+hidden_size = 100  # Size of the hidden layers
+batch_size = 1  # Number of experiences we use for training per batch
+grid_size = 10  # Size of the playing field
+
+exp_replay = ExperienceReplay(max_memory=max_memory)
 
 
-def train(model, epochs, verbose=1):
+def train(game, model, epochs, verbose=1):
     # Train
     # Reseting the win counter
     win_cnt = 0
@@ -11,10 +22,12 @@ def train(model, epochs, verbose=1):
     for e in range(epochs):
         loss = 0.
         # Resetting the game
-        env.reset()
+        game.reset()
         game_over = False
         # get initial input
-        input_t = env.observe()
+        input_t = game.observe()
+
+        # press enter if game over
 
         while not game_over:
             # The learner is acting on the last observed game screen
@@ -41,7 +54,7 @@ def train(model, epochs, verbose=1):
                 action = np.argmax(q[0])
 
             # apply action, get rewards and new state
-            input_t, reward, game_over = env.act(action)
+            input_t, reward, game_over = game.act(action)
             # If we managed to catch the fruit we add 1 to our win counter
             if reward == 1:
                 win_cnt += 1
