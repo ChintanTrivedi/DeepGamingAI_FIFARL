@@ -4,7 +4,7 @@ from PIL import Image
 import pytesseract as pt
 from getkeys import key_check
 import time
-import FIFA
+from FIFA import FIFA
 from train import train
 from grabscreen import grab_screen
 from keras.models import model_from_json
