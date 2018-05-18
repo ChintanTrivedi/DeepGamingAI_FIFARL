@@ -35,7 +35,7 @@ class FIFA(object):
 
     def _is_over(self, action):
         # true if released shoot, false otherwise
-        return action == 4
+        return action == 1
 
     def observe(self):
         # get current state s from screen using screen-grab
@@ -46,7 +46,22 @@ class FIFA(object):
         return state
 
     def act(self, action):
-        PressKey(0x39)
+        if action == 1:
+            # press shoot
+            PressKey(0x39)
+        elif action == 2:
+            # press left arrow
+            PressKey(0x39)
+        elif action == 3:
+            # press right arrow
+            PressKey(0x39)
+        elif action == 4:
+            # press left arrow + shoot
+            PressKey(0x39)
+        elif action == 5:
+            # press right arrow + shoot
+            PressKey(0x39)
+
         # wait until some time after taking action
         reward = self._get_reward()
         game_over = self._is_over(action)
