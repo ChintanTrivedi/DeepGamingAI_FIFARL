@@ -47,6 +47,5 @@ class CNN(object):
 
                 image_np = cv2.resize(image, (900, 400))
                 image_np_expanded = np.expand_dims(image_np, axis=0)
-
                 rep = sess.run([feature_vector], feed_dict={image_tensor: image_np_expanded})
                 return np.array(rep).reshape(-1, 128)

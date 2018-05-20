@@ -24,14 +24,15 @@ def baseline_model(grid_size, num_actions, hidden_size):
 
 
 model = baseline_model(grid_size=128, num_actions=6, hidden_size=200)
-model.summary()
+# model.summary()
 
 # necessary evil
 pt.pytesseract.tesseract_cmd = 'C:/Program Files (x86)/Tesseract-OCR/tesseract'
 
 game = FIFA()
+print("game object created")
 
-epoch = 5000  # Number of games played in training, I found the model needs about 4,000 games till it plays well
+epoch = 100  # Number of games played in training, I found the model needs about 4,000 games till it plays well
 # Train the model
 # For simplicity of the noteb
 hist = train(game, model, epoch, verbose=1)

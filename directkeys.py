@@ -8,6 +8,7 @@ import time
 
 SendInput = ctypes.windll.user32.SendInput
 
+# http://geck.bethsoft.com/index.php?title=Template:DirectX_Scancodes
 W = 0x11
 Q = 0x10
 F = 0x21
@@ -16,6 +17,7 @@ leftarrow = 0xcb
 rightarrow = 0xcd
 uparrow = 0xc8
 downarrow = 0xd0
+enter = 0x1c
 U = 0x16
 J = 0x24
 H = 0x23
