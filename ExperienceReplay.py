@@ -1,4 +1,5 @@
 import numpy as np
+import os
 
 
 class ExperienceReplay(object):
@@ -7,7 +8,7 @@ class ExperienceReplay(object):
     In training, batches of randomly drawn experiences are used to generate the input and target for training.
     """
 
-    def __init__(self, max_memory=100, discount=.9):
+    def __init__(self, max_memory=100000, discount=.9):
         """
         Setup
         max_memory: the maximum number of experiences we want to store

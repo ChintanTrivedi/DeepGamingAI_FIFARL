@@ -7,6 +7,7 @@ import time
 from FIFA import FIFA
 from train import train
 from grabscreen import grab_screen
+from matplotlib import pyplot as plt
 from keras.models import model_from_json
 from keras.models import Sequential
 from keras.layers.core import Dense
@@ -14,7 +15,7 @@ from keras.optimizers import sgd
 
 
 def baseline_model(grid_size, num_actions, hidden_size):
-    # seting up the model with keras
+    # setting up the model with keras
     model = Sequential()
     model.add(Dense(hidden_size, input_shape=(grid_size,), activation='relu'))
     model.add(Dense(hidden_size, activation='relu'))
@@ -23,7 +24,14 @@ def baseline_model(grid_size, num_actions, hidden_size):
     return model
 
 
-model = baseline_model(grid_size=128, num_actions=6, hidden_size=200)
+def moving_average_diff(a, n=100):
+    diff = np.diff(a)
+    ret = np.cumsum(diff, dtype=float)
+    ret[n:] = ret[n:] - ret[:-n]
+    return ret[n - 1:] / n
+
+
+model = baseline_model(grid_size=128, num_actions=4, hidden_size=256)
 # model.summary()
 
 # necessary evil
@@ -32,21 +40,14 @@ pt.pytesseract.tesseract_cmd = 'C:/Program Files (x86)/Tesseract-OCR/tesseract'
 game = FIFA()
 print("game object created")
 
-epoch = 100  # Number of games played in training, I found the model needs about 4,000 games till it plays well
+epoch = 1000  # Number of games played in training, I found the model needs about 4,000 games till it plays well
 # Train the model
 # For simplicity of the noteb
 hist = train(game, model, epoch, verbose=1)
 print("Training done")
-
-
-def save_model(model):
-    # serialize model to JSON
-    model_json = model.to_json()
-    with open("model.json", "w") as json_file:
-        json_file.write(model_json)
-    # serialize weights to HDF5
-    model.save_weights("model.h5")
-    print("Saved model to disk")
+plt.plot(moving_average_diff(hist))
+plt.ylabel('Average of victories per game')
+plt.show()
 
 
 def load_model():

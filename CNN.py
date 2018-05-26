@@ -3,6 +3,7 @@ import tensorflow as tf
 import numpy as np
 import cv2
 from utils import label_map_util
+import time
 
 
 class CNN(object):
@@ -38,6 +39,7 @@ class CNN(object):
         category_index = label_map_util.create_category_index(categories)
 
     def get_image_feature_map(self, image):
+        start = time.time()
         with self.detection_graph.as_default():
             with tf.Session(graph=self.detection_graph) as sess:
                 # Definite input and output Tensors for detection_graph

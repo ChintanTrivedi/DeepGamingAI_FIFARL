@@ -4,14 +4,24 @@ from getkeys import key_check
 from ExperienceReplay import ExperienceReplay
 
 # parameters
-epsilon = .4  # exploration
-num_actions = 6  # [ nothing, shoot, left_arrow, right_arrow, left_arrow_shoot, right_arrow_shoot ]
+# epsilon = .2  # exploration
+num_actions = 4  # [ shoot_low, shoot_high, left_arrow, right_arrow]
 max_memory = 500  # Maximum number of experiences we are storing
 hidden_size = 100  # Size of the hidden layers
 batch_size = 1  # Number of experiences we use for training per batch
 grid_size = 10  # Size of the playing field
 
 exp_replay = ExperienceReplay(max_memory=max_memory)
+
+
+def save_model(model):
+    # serialize model to JSON
+    model_json = model.to_json()
+    with open("model.json", "w") as json_file:
+        json_file.write(model_json)
+    # serialize weights to HDF5
+    model.save_weights("model.h5")
+    print("Saved model to disk")
 
 
 def train(game, model, epochs, verbose=1):
@@ -23,13 +33,14 @@ def train(game, model, epochs, verbose=1):
     # Epochs is the number of games we play
     for e in range(epochs):
         loss = 0.
+        epsilon = 1 / ((e + 1) ** 1 / 2)
         # Resetting the game
         game.reset()
         game_over = False
-        # get initial input
+        # get tensorflow running first to acquire cudnn handle
         input_t = game.observe()
-        paused = False
-
+        paused = True
+        
         while not game_over:
             if not paused:
                 # The learner is acting on the last observed game screen
@@ -60,9 +71,6 @@ def train(game, model, epochs, verbose=1):
                 # If we managed to catch the fruit we add 1 to our win counter
                 if reward == 1:
                     win_cnt += 1
-
-                    # Uncomment this to render the game here
-                # display_screen(action,3000,inputs[0])
 
                 """
                 The experiences < s, a, r, s’ > we make during gameplay are our training data.
@@ -98,5 +106,6 @@ def train(game, model, epochs, verbose=1):
 
         if verbose > 0:
             print("Epoch {:03d}/{:03d} | Loss {:.4f} | Win count {}".format(e, epochs, loss, win_cnt))
+            save_model(model)
         win_hist.append(win_cnt)
     return win_hist
