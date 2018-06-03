@@ -31,7 +31,7 @@ def train(game, model, epochs, verbose=1):
     # Epochs is the number of games we play
     for e in range(epochs):
         loss = 0.
-        epsilon = 4 / ((e + 1001) ** (1 / 2))
+        epsilon = 4 / ((e + 1) ** (1 / 2))
         # Resetting the game
         game.reset()
         game_over = False
