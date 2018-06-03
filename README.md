@@ -1,6 +1,8 @@
 # DeepGamingAI_FIFARL
 Using Reinforcement Learning to play FIFA
 
+![alt text](https://media.licdn.com/media/gcrc/dms/image/C4D12AQH9xhKq5UFCKw/article-cover_image-shrink_720_1280/0?e=2127686400&v=beta&t=6DJBw2VQWNeHavXIgGZpIwli3rH1E-fak_dZNG7l36Y)
+
 # Code Tutorial
 https://medium.com/@chintan.t93/using-deep-q-learning-in-fifa-18-to-perfect-the-art-of-free-kicks-f2e4e979ee66
 
