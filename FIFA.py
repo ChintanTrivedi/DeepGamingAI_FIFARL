@@ -34,7 +34,7 @@ class FIFA(object):
 
             print('current reward: ' + str(self.reward))
             print('observed reward: ' + str(ingame_reward))
-            if ingame_reward - self.reward > 1000:
+            if ingame_reward - self.reward > 200:
                 # if ball hits the target
                 self.reward = ingame_reward
                 ingame_reward = 1
@@ -48,7 +48,7 @@ class FIFA(object):
                 ingame_reward = 0
             print('q-learning reward: ' + str(ingame_reward))
         except:
-            ingame_reward = 0
+            ingame_reward = -1 if self._is_over(action) else 0
             print('exception q-learning reward: ' + str(ingame_reward))
 
         return ingame_reward
@@ -63,24 +63,25 @@ class FIFA(object):
         # is_over = np.mean(ball_location[:, :, 0]) < 60
         # print('is over, ball presence. mean=' + str(np.mean(ball_location[:, :, 0])))
         is_over = True if action in [0, 1] else False
-        if is_over:
-            print('over')
         return is_over
 
     def observe(self):
-        print('observe')
+        print('\n\nobserve')
         # get current state s from screen using screen-grab
         screen = grab_screen(region=None)
         screen = screen[25:-40, 1921:]
 
         # if drill over, restart drill and take screenshot again
-        restart_button = screen[745:775, 600:720]
+        restart_button = screen[745:775, 600:800]
         i = Image.fromarray(restart_button.astype('uint8'), 'RGB')
         restart_text = pt.image_to_string(i)
         if "RETRV DRILL" in restart_text:
             # press enter key
             print('pressing enter, reset reward')
             self.reward = 0
+            PressKey(leftarrow)
+            time.sleep(0.4)
+            ReleaseKey(leftarrow)
             PressKey(enter)
             time.sleep(0.4)
             ReleaseKey(enter)

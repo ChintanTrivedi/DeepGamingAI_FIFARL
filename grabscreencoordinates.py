@@ -25,8 +25,8 @@ while True:
         # print(total_reward)
 
         # the reward meter at top right corner of game screen
-        reward_screen = screen[85:130, 1650:1730]
-        reward_screen = cv2.resize(reward_screen, (800, 450))
+        reward_screen = screen[745:775, 600:800]
+        # reward_screen = cv2.resize(reward_screen, (800, 450))
         i = Image.fromarray(reward_screen.astype('uint8'), 'RGB')
         total_reward = pt.image_to_string(i)
         print(total_reward)
