@@ -19,3 +19,6 @@ https://www.youtube.com/watch?v=MasxAN-xZIU
 # To run
 Go to the root directory and run main.py in train or test mode.
 Toggle the train_mode variable to run in train or test mode.
+
+# Acknowledgements for code
+https://medium.freecodecamp.org/deep-reinforcement-learning-where-to-start-291fb0058c01
